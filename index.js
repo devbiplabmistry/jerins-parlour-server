@@ -29,8 +29,15 @@ async function run() {
     const reviewCollection = client.db("jerinsParlour").collection("reviews");
 
     // booking api's
+    app.get('/bookings', async (req, res) => {
+       const result = await bookingCollection.find().toArray();   
+      res.send(result) 
+    });
     app.post('/bookings', async (req, res) => {
-      
+      const bookings =req.body;
+      bookings.status = "pending";
+      const result = await bookingCollection.insertOne(bookings);
+      res.send(result) 
     });
 
     // services api
