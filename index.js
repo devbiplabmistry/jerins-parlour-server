@@ -26,10 +26,11 @@ async function run() {
     await client.connect();
     const bookingCollection = client.db("jerinsParlour").collection("bookings");
     const serviceCollection = client.db("jerinsParlour").collection("services");
+    const reviewCollection = client.db("jerinsParlour").collection("reviews");
 
     // booking api's
     app.post('/bookings', async (req, res) => {
-      // Handle booking POST request here
+      
     });
 
     // services api
@@ -37,12 +38,20 @@ async function run() {
       const result = await serviceCollection.find().toArray();
       res.send(result);
     });
+    // review api
+    app.post('/reviews', async (req, res) => {
+      const review =req.body;
+      const result = await reviewCollection.insertOne(review);
+      res.send(result)
+      
+    });
 
 
 
 
 
-    
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
