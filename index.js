@@ -27,17 +27,18 @@ async function run() {
     const bookingCollection = client.db("jerinsParlour").collection("bookings");
     const serviceCollection = client.db("jerinsParlour").collection("services");
     const reviewCollection = client.db("jerinsParlour").collection("reviews");
+    const userCollection = client.db("jerinsParlour").collection("users");
 
     // booking api's
     app.get('/bookings', async (req, res) => {
-       const result = await bookingCollection.find().toArray();   
-      res.send(result) 
+      const result = await bookingCollection.find().toArray();
+      res.send(result)
     });
     app.post('/bookings', async (req, res) => {
-      const bookings =req.body;
+      const bookings = req.body;
       bookings.status = "pending";
       const result = await bookingCollection.insertOne(bookings);
-      res.send(result) 
+      res.send(result)
     });
 
     // services api
@@ -47,11 +48,29 @@ async function run() {
     });
     // review api
     app.post('/reviews', async (req, res) => {
-      const review =req.body;
+      const review = req.body;
       const result = await reviewCollection.insertOne(review);
       res.send(result)
-      
+
     });
+
+    // users api
+    app.get('/users', async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
+
+    app.post('/users', async (req, res) => {
+      const newUser = req.body.email;
+      const existingUser = await userCollection.findOne({ email: newUser });
+ 
+      if (!existingUser) {
+        const result = await userCollection.insertOne(newUser);
+        res.send(result);
+      } 
+    });
+
 
 
 
